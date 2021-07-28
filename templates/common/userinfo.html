@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="container mx-auto" style="margin:7rem">
+    <form id="searchForm" method="get" action="{% url 'pybo:board' %}">
+        <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+        <input type="hidden" id="qa" name="qa" value="">
+    </form>
+    <div class="row">
+<!--        유저 정보-->
+        <div class="col-4 card">
+            <img src="{% static 'pybo/cup-3.jpg' %}" class="card-top-img p-2">
+            <ul class="list-group my-3">
+                <li class="list-group-item"><a href="#">질문&답변</a></li>
+                <li class="list-group-item"><a href="#" >개인정보</a></li>
+                <li class="list-group-item"><a href="#" class="text-danger">회원탈퇴</a></li>
+            </ul>
+        </div>
+<!--        질문 & 답변 목록-->
+        <div class="col-8 card">
+            <div>
+                <ul class="list-unstyled"><h3 class="card-title my-4">질문목록</h3>
+                {% for question in question_list %}
+                    {% if forloop.counter0 < 3 %}
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' question.id %}">{{question.subject}}</a>
+                        <span class="text-right">{{question.create_date}}</span></li>
+                    {% endif %}
+                {% endfor %}
+                    <li class="small mt-2"><a href="#" class="btn" id="que" value="{{ question.id }}">
+                        더 보기...
+                    </a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="list-unstyled"><h3 class="card-title my-4">답변목록</h3>
+                {% for answer in answer_list %}
+                    {% if forloop.counter0 < 3 %}
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' answer.question.id %}">{{ answer.content }}</a>
+                        <span class="text-right">{{answer.create_date}}</span></li>
+                    {% endif %}
+                {% endfor %}
+                    <li class="small mt-2"><a href="#" class="btn" id="as" value="{{ answer.id }}">
+                        더 보기...
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $(".btn").on('click',function(){
+            $("#kw").val($(this).val());
+            if($(this).attr('id') == "que")
+                $("#qa").val("que")
+            else
+                $("#qa").val("as")
+            $("#searchForm").submit();
+        })
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>제이쿼리 예제</title>
+    <link rel="stylesheet" href="{% static 'pybo/bootstrap.css' %}">
+    <script src="{% static 'pybo/jquery-3.6.0.js' %}"?></script>
+    <script>
+        $(function(){
+            $("p").on('mouseover',function(){
+                $(this).css('color','red');
+            });
+            $("p").on('mouseout',function(){
+                $(this).css('color','black');
+            });
+
+            /*
+            $("p").click(function(){
+                $(this).hide();
+            });
+            */
+        });
+    </script>
+</head>
+<body>
+    <p>나를 클릭하면, 내가 사라진다.</p>
+</body>
+</html>

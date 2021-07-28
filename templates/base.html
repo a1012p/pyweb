@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"  href="{% static 'pybo/bootstrap.css' %}">
+    <link rel="stylesheet"  href="{% static 'pybo/style.css' %}">
+    <title>Hello~py</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<!--기본 템플릿 안에 삽입될 내용 start -->
+
+{% block content %}
+{% endblock %}
+<script src="{% static 'pybo/jquery-3.6.0.js' %}"></script>
+<script src="{% static 'pybo/bootstrap.js' %}"></script>
+<!--기본 템플릿 안에 삽입될 내용 end -->
+{% block script %}
+{% endblock %}
+</body>
+</html>

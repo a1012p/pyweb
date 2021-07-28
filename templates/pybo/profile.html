@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'pybo/profile.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <nav>
+                <div id="logo">
+                    <a href="{% url 'pybo:index' %}"><h2>PyWeb</h2></a>
+                </div>
+                <ul id="main-nav">
+                    <li><a href="#who">나는?(who)</a></li>
+                    <li><a href="#jop">학력</a></li>
+                    <li><a href="#skill">기술(skill)</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id="who">
+            <div class = "page-title">
+                <h1>Who Am I?</h1>
+            </div>
+            <div class = "content">
+                <div class ="photo self">
+                </div>
+                <div class = "text">
+                    <p>인천에서 살고있는 27살 황태환입니다.<br>
+                       현재는 부평 에듀윌에서 파이썬 웹 프로그래밍 교육을 받고있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section id = "jop">
+            <div class ="page-title">
+                <h1>학력 / 경력</h1>
+            </div>
+            <div class="content">
+                <div class = "text">
+                    <ul id ="career">
+                        <li>인천남고등학교 졸업</li>
+                        <li>순천향대학교 컴퓨터공학과 자퇴</li>
+                        <li>SBS게임학원 게임프로그래밍 수료</li>
+                        <li>부평 에듀윌학원 - 파이썬 웹 프로그래밍 교육중</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id = "skill">
+            <div class ="page-title">
+                <h1>SKill</h1>
+            </div>
+            <div class="content">
+                <div class = "photo">
+                    <img src="{% static 'pybo/cup-1.jpg'%}" alt="컵">
+                </div>
+                <div class = "text">
+                    <p>☞작품을 클릭하면 사이트로 이동합니다</p>
+                    <ol id= "link">
+                        <li><a href="{% url 'pybo:board' %}">회원관리형 게시판</a></li>
+                        <li><a href="#">북마크 관리 페이지</a></li>
+                        <li><a href="#">팀 프로젝트 이름</a></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div id = "bottomMenu">
+                <ul>
+                    <li><a href="#">블로그</a></li>
+                    <li><a href="#">SNS</a></li>
+                    <li><a href="#">Email : a1027p@gmail.com</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
