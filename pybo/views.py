@@ -255,17 +255,3 @@ def vote_answer(request,answer_id):
         answer.voter.add(request.user)
     return redirect('pybo:detail',question_id=answer.question.id)
 
-
-"""
-def jqtest(request):
-    return render(request,'pybo/jqtest.html')
-
-def imgtest(request):
-    return render(request,'pybo/imgtest.html')
-
-def market(request):
-    return render(request,'pybo/market.html')
-
-def components(request):
-    return render(request,'pybo/boot_components.html')
-"""
