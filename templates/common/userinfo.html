@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+{% load common_filter %}
 <div class="container mx-auto" style="margin:7rem">
     <form id="searchForm" method="get" action="{% url 'pybo:board' %}">
         <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
@@ -22,26 +23,42 @@
                 <ul class="list-unstyled"><h3 class="card-title my-4">질문목록</h3>
                 {% for question in question_list %}
                     {% if forloop.counter0 < 3 %}
-                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' question.id %}">{{question.subject}}</a>
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' question.id %}">
+                        {% if question.subject|length > 30 %}
+                            {{question.subject | abridge:30}}
+                        {% else %}
+                            {{question.subject}}
+                        {% endif %}
+                    </a>
                         <span class="text-right">{{question.create_date}}</span></li>
                     {% endif %}
                 {% endfor %}
-                    <li class="small mt-2"><a href="#" class="btn" id="que" value="{{ question.id }}">
+                {% if question_list.count >= 3%}
+                    <li class="small mt-2"><a href="#" class="btn" id="que">
                         더 보기...
                     </a></li>
+                {% endif %}
                 </ul>
             </div>
             <div>
                 <ul class="list-unstyled"><h3 class="card-title my-4">답변목록</h3>
                 {% for answer in answer_list %}
                     {% if forloop.counter0 < 3 %}
-                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' answer.question.id %}">{{ answer.content }}</a>
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' answer.question.id %}">
+                        {% if answer.content|length > 30 %}
+                            {{answer.content|abridge:30 }}...
+                        {% else %}
+                            {{ answer.content}}
+                        {% endif %}
+                    </a>
                         <span class="text-right">{{answer.create_date}}</span></li>
                     {% endif %}
                 {% endfor %}
-                    <li class="small mt-2"><a href="#" class="btn" id="as" value="{{ answer.id }}">
+                {% if answer_list.count >= 3 %}
+                    <li class="small mt-2"><a href="#" class="btn" id="as">
                         더 보기...
                     </a></li>
+                {% endif %}
                 </ul>
             </div>
         </div>
@@ -52,7 +69,7 @@
 <script>
     $(document).ready(function(){
         $(".btn").on('click',function(){
-            $("#kw").val($(this).val());
+            $("#kw").val({{ user_id }});
             if($(this).attr('id') == "que")
                 $("#qa").val("que")
             else

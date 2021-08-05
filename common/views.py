@@ -20,7 +20,7 @@ def signup(request):
 
 def userinfo(request,user_id):
     user = User.objects.get(id=user_id)
-    question_list = user.author_question.all()
-    answer_list = user.author_answer.all()
-    context = {'question_list':question_list , 'answer_list':answer_list}
+    question_list = user.author_question.all().order_by('-create_date')
+    answer_list = user.author_answer.all().order_by('-create_date')
+    context = {'question_list':question_list , 'answer_list':answer_list ,'user_id':user_id}
     return render(request,'common/userinfo.html',context)
