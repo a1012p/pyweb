@@ -9,4 +9,5 @@ urlpatterns = [
     path('',base_views.index,name='index'),
     path('pybo/',include('pybo.urls')),
     path('common/',include('common.urls')),
-] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+]
+urlpatterns +=  static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
