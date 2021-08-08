@@ -20,7 +20,8 @@ def signup(request):
             user = authenticate(username= username , password=raw_password)
             profile = Proform.save(commit=False)
             profile.user = user;
-            profile.photo = request.FILES['photo']
+            if request.FILES:
+                profile.photo = request.FILES['photo']
             profile.nickname = request.POST['nickname']
             profile.save()
             login(request,user)

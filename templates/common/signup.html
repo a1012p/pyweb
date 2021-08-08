@@ -37,10 +37,10 @@
       <input type="email" class="form-control" name="email" id="email"
         value="{{ form.email.value | default_if_none:'' }}">
     </div>
-    <div>
+    <div class="w-25">
       <label for="photo">이미지</label>
       <input type="file" name="photo" id="photo" class="form-control-file"
-        value = "{{ Proform.photo.value }}"multiple >
+        multiple >
     </div>
     <button type="submit" class="btn btn-primary my-3">생성하기</button>
   </form>

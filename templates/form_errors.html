@@ -13,6 +13,21 @@
     </div>
   {% endfor %}
 {% endif %}
+{% if Proform.errors %}  <!-- 필드 오류 -->
+  {% for field in Proform %}
+    {% for error in field.errors %}
+      <div class="alert alert-danger">
+        <strong>{{ field.label }}</strong>
+        {{ error }}
+      </div>
+    {% endfor %}
+  {% endfor %}
+  {% for error in Proform.non_field_errors %}
+    <div class="alert alert-danger">
+      <strong>{{ error }}</strong>
+    </div>
+  {% endfor %}
+{% endif %}
 {% if messages %}
     {% for message in messages %}
       <div class="alert alert-{{ message.tags }}">
