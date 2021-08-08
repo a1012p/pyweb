@@ -57,5 +57,5 @@ def userinfo(request,user_id):
             return redirect('common:userinfo',user_id)
     else:
         profile_form = ProfileForm(instance=user.profile)
-    context = {'form' : profile_form}
+    context = {'form' : profile_form ,'profile':user.profile }
     return render(request,'common/userinfo.html',context)

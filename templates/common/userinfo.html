@@ -8,8 +8,8 @@
     <div class="row">
 <!--        유저 정보-->
         <div class="col-4 card">
-            {%if user.profile.photo %}
-            <img src="{{ user.profile.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
+            {%if profile.photo %}
+            <img src="{{ profile.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
             {% else %}
             <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
             {% endif %}
