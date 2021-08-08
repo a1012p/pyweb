@@ -12,7 +12,7 @@
 <!--        유저 정보-->
         <div class="col-4 card">
             {%if profile_form.photo %}
-            <img src="{{profile_form.photo.url}}" class="card-top-img img-thumbnail" style="margin:auto">
+            <img src="{{ profile_form.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
             {% else %}
             <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
             {% endif %}
