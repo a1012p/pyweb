@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load common_filter %}
+
+<div class="container mx-auto" style="margin:7rem">
+    <form id="searchForm" method="get" action="{% url 'pybo:board' %}">
+        <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+        <input type="hidden" id="qa" name="qa" value="">
+    </form>
+    <div class="row">
+<!--        유저 정보-->
+        <div class="col-4 card">
+            {%if profile_form.photo %}
+            <img src="{{profile_form.photo.url}}" class="card-top-img img-thumbnail" style="margin:auto">
+            {% else %}
+            <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
+            {% endif %}
+            <ul class="list-group my-3">
+                <li class="list-group-item"><a href="#">질문&답변</a></li>
+                <li class="list-group-item"><a href="{% url 'common:userinfo' user.id %}" >개인정보</a></li>
+                <li class="list-group-item"><a href="#" class="text-danger">회원탈퇴</a></li>
+            </ul>
+        </div>
+<!--        질문 & 답변 목록-->
+        <div class="col-8 card">
+            <div>
+                <ul class="list-unstyled"><h3 class="card-title my-4">질문목록</h3>
+                {% for question in question_list %}
+                    {% if forloop.counter0 < 3 %}
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' question.id %}">
+                        {% if question.subject|length > 30 %}
+                            {{question.subject | abridge:30}}
+                        {% else %}
+                            {{question.subject}}
+                        {% endif %}
+                    </a>
+                        <span class="text-right">{{question.create_date}}</span></li>
+                    {% endif %}
+                {% endfor %}
+                {% if question_list.count >= 3%}
+                    <li class="small mt-2"><a href="#" class="btn" id="que">
+                        더 보기...
+                    </a></li>
+                {% endif %}
+                </ul>
+            </div>
+            <div>
+                <ul class="list-unstyled"><h3 class="card-title my-4">답변목록</h3>
+                {% for answer in answer_list %}
+                    {% if forloop.counter0 < 3 %}
+                    <li class="d-flex justify-content-between"><a href="{% url 'pybo:detail' answer.question.id %}">
+                        {% if answer.content|length > 30 %}
+                            {{answer.content|abridge:30 }}...
+                        {% else %}
+                            {{ answer.content}}
+                        {% endif %}
+                    </a>
+                        <span class="text-right">{{answer.create_date}}</span></li>
+                    {% endif %}
+                {% endfor %}
+                {% if answer_list.count >= 3 %}
+                    <li class="small mt-2"><a href="#" class="btn" id="as">
+                        더 보기...
+                    </a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $(".btn").on('click',function(){
+            $("#kw").val({{ user_id }});
+            if($(this).attr('id') == "que")
+                $("#qa").val("que")
+            else
+                $("#qa").val("as")
+            $("#searchForm").submit();
+        })
+    })
+</script>
+{% endblock %}

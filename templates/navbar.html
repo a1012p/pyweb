@@ -18,12 +18,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'pybo:board' %}">질문/답변</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'pybo:profile' %}">나의 프로필</a>
-            </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'common:userinfo' user.id %}">유저</a>
+                <a class="nav-link" href="{% url 'common:profile' user.id %}">{{ user.profile.nickname }}(닉네임)</a>
             </li>
             {% endif %}
         </ul>

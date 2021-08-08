@@ -17,7 +17,6 @@ def question_create(request):
             question = form.save(commit=False)
             question.author = request.user
             question.create_date = timezone.now()
-            question.views += 1;
             question.save()
             return redirect('pybo:board')
     else:
