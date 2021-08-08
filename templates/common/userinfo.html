@@ -33,6 +33,9 @@
                     <div class="form-group p-3 m-3 formcolor" style="border:4px solid #0422">
                         <label for="photo">이미지</label>
                         <input type="file" class="form-control-file" id="photo" name="photo">
+                        {%if profile.photo %}
+                        {{profile.photo.url}}
+                        {% endif%}
                     </div>
                 </div>
                 <button type="submit" class="btn btn-secondary mt-3 float-right">변경</button>
