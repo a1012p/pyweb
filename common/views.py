@@ -2,11 +2,15 @@ import os
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password, is_password_usable
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.shortcuts import render , redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from .forms import UserForm, ProfileForm
 from .models import Profile
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def signup(request):
@@ -36,8 +40,7 @@ def profile(request,user_id):
     user = User.objects.get(id=user_id)
     question_list = user.author_question.all().order_by('-create_date')
     answer_list = user.author_answer.all().order_by('-create_date')
-    profile_form = user.profile
-    context = {'question_list':question_list , 'answer_list':answer_list ,'user_id':user_id , 'profile_form' :profile_form}
+    context = {'question_list':question_list , 'answer_list':answer_list , 'profile' :user.profile}
     return render(request,'common/profile.html',context)
 
 def userinfo(request,user_id):
@@ -67,3 +70,30 @@ def dropout(request,user_id):
     user.profile.delete()
     user.delete()
     return redirect('index')
+
+def passwordchange(request,user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        now_password = request.POST['now_password']
+        if check_password(now_password,user.password):
+            new_password = request.POST['password1']
+            confirm_password = request.POST['password2']
+            try:
+                validate_password(new_password)
+                validate_password(confirm_password)
+            except ValidationError as e:
+                context = {'profile': user.profile ,'errors':e}
+                return render(request,'common/passwordchange.html',context)
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request,user)
+                messages.success(request,"비밀번호가 정상적으로 변경되었습니다")
+                return redirect('common:passwordchange',user_id)
+            else:
+                messages.warning(request,"새로운 비밀번호를 확인해주세요")
+        else:
+            messages.warning(request, "현재 비밀번호를 확인해주세요")
+
+    context = {'profile': user.profile}
+    return render(request,'common/passwordchange.html',context)

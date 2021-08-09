@@ -11,14 +11,15 @@
     <div class="row">
 <!--        유저 정보-->
         <div class="col-4 card">
-            {%if profile_form.photo %}
-            <img src="{{ profile_form.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
+            {%if profile.photo %}
+            <img src="{{ profile.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
             {% else %}
             <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
             {% endif %}
             <ul class="list-group my-3">
                 <li class="list-group-item"><a href="#">질문&답변</a></li>
-                <li class="list-group-item"><a href="{% url 'common:userinfo' user.id %}" >개인정보</a></li>
+                <li class="list-group-item"><a href="{% url 'common:userinfo' profile.user.id %}" >개인정보</a></li>
+                <li class="list-group-item"><a href="{% url 'common:passwordchange' profile.user.id %}">비밀번호 수정</a></li>
                 <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
             </ul>
         </div>
@@ -83,7 +84,7 @@
             $("#searchForm").submit();
         })
         $('.drop').on('click',function(){
-            location.href="{% url 'common:dropout' user.id %}"
+            location.href="{% url 'common:dropout' profile.user.id %}"
         })
     })
 </script>
