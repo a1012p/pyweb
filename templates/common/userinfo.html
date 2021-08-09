@@ -16,9 +16,10 @@
             <ul class="list-group my-3">
                 <li class="list-group-item"><a href="{% url 'common:profile' user.id %}">질문&답변</a></li>
                 <li class="list-group-item"><a href="#" >개인정보</a></li>
-                <li class="list-group-item"><a href="#" class="text-danger">회원탈퇴</a></li>
+                <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
             </ul>
         </div>
+        {% include 'common/drop_out.html' %}
         <div class="col-8 card">
             <form class="card-body" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
@@ -34,7 +35,7 @@
                         <label for="photo">이미지</label>
                         <input type="file" class="form-control-file" id="photo" name="photo">
                         {%if profile.photo %}
-                        {{profile.photo.url}}
+                        {{profile.photo.name}}
                         {% endif%}
                     </div>
                 </div>
@@ -46,5 +47,10 @@
 {% endblock %}
 {% block script %}
 <script>
+    $(document).ready(function(){
+        $('.drop').on('click',function(){
+            location.href="{% url 'common:dropout' user.id %}"
+        })
+    })
 </script>
 {% endblock %}

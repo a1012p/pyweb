@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render , redirect
-from django.contrib.auth import authenticate ,login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import UserForm, ProfileForm
 from .models import Profile
@@ -59,3 +59,11 @@ def userinfo(request,user_id):
         profile_form = ProfileForm(instance=user.profile)
     context = {'form' : profile_form ,'profile':user.profile }
     return render(request,'common/userinfo.html',context)
+
+def dropout(request,user_id):
+    user = User.objects.get(id=user_id)
+    if request.user.is_authenticated:
+        logout(request)
+    user.profile.delete()
+    user.delete()
+    return redirect('index')

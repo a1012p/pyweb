@@ -20,7 +20,7 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'common:profile' user.id %}">유저정보</a>
+                <a class="nav-link" href="{% url 'common:profile' user.id %}"><span class="font-weight-bold">{{user.profile.nickname}}</span>님 페이지</a>
             </li>
             {% endif %}
         </ul>

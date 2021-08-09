@@ -19,9 +19,10 @@
             <ul class="list-group my-3">
                 <li class="list-group-item"><a href="#">질문&답변</a></li>
                 <li class="list-group-item"><a href="{% url 'common:userinfo' user.id %}" >개인정보</a></li>
-                <li class="list-group-item"><a href="#" class="text-danger">회원탈퇴</a></li>
+                <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
             </ul>
         </div>
+        {% include 'common/drop_out.html' %}
 <!--        질문 & 답변 목록-->
         <div class="col-8 card">
             <div>
@@ -39,7 +40,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if question_list.count >= 3%}
-                    <li class="small mt-2"><a href="#" class="btn" id="que">
+                    <li class="small mt-2 more"><a href="#" class="btn" id="que">
                         더 보기...
                     </a></li>
                 {% endif %}
@@ -60,7 +61,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if answer_list.count >= 3 %}
-                    <li class="small mt-2"><a href="#" class="btn" id="as">
+                    <li class="small mt-2 more"><a href="#" class="btn" id="as">
                         더 보기...
                     </a></li>
                 {% endif %}
@@ -73,13 +74,16 @@
 {% block script %}
 <script>
     $(document).ready(function(){
-        $(".btn").on('click',function(){
+        $("#more").on('click',function(){
             $("#kw").val({{ user_id }});
             if($(this).attr('id') == "que")
                 $("#qa").val("que")
             else
                 $("#qa").val("as")
             $("#searchForm").submit();
+        })
+        $('.drop').on('click',function(){
+            location.href="{% url 'common:dropout' user.id %}"
         })
     })
 </script>
