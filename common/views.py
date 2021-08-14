@@ -86,8 +86,8 @@ def passwordchange(request,user_id):
                 return render(request,'common/passwordchange.html',context)
             if new_password == confirm_password:
                 user.set_password(new_password)
-                user.save()
                 update_session_auth_hash(request,user)
+                user.save()
                 messages.success(request,"비밀번호가 정상적으로 변경되었습니다")
                 return redirect('common:passwordchange',user_id)
             else:

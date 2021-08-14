@@ -12,4 +12,7 @@ class Profile(models.Model):
     def delete(self, *args,**kargs):
         os.remove(os.path.join(settings.MEDIA_ROOT ,self.photo.name))
         super(Profile,self).delete(*args,**kargs)
+
+    def photoname(self):
+        return self.photo.name.split('/')[-1]
 # Create your models here.

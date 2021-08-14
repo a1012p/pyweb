@@ -1,27 +1,5 @@
-{% extends 'base.html' %}
-{% block style %}
-{% endblock %}
-{% block content %}
-{% load static %}
-<div class="container mx-auto" style="margin:7rem">
-    {% include 'form_errors.html' %}
-    <div class="row">
-<!--        유저 정보-->
-        <div class="col-4 card">
-            {%if profile.photo %}
-            <img src="{{ profile.photo.url }}" class="card-top-img img-thumbnail" style="margin:auto">
-            {% else %}
-            <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
-            {% endif %}
-            <ul class="list-group my-3">
-                <li class="list-group-item"><a href="{% url 'common:profile' profile.user.id %}">질문&답변</a></li>
-                <li class="list-group-item"><a href="#" >개인정보</a></li>
-                <li class="list-group-item"><a href="{% url 'common:passwordchange' profile.user.id %}">비밀번호 수정</a></li>
-                <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
-            </ul>
-        </div>
-        {% include 'common/drop_out.html' %}
-        <div class="col-8 card">
+{% extends 'common/profilebase.html' %}
+{% block box %}
             <form class="card-body" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
                 <div class="border border-primary rounded w-50 my-3" >
@@ -34,24 +12,12 @@
                 <div class="border border-primary rounded w-50 my-3">
                     <div class="form-group p-3 m-3" style="border:4px solid #0422">
                         <label for="photo">이미지</label>
-                        <input type="file" class="form-control-file" id="photo" name="photo">
+                        <input type="file" class="form-control-file" id="photo" name="photo" multiple>
                         {%if profile.photo %}
-                        {{profile.photo.name}}
+                        {{profile.photoname}}
                         {% endif%}
                     </div>
                 </div>
                 <button type="submit" class="btn btn-secondary mt-3 float-right">변경</button>
             </form>
-        </div>
-    </div>
-</div>
-{% endblock %}
-{% block script %}
-<script>
-    $(document).ready(function(){
-        $('.drop').on('click',function(){
-            location.href="{% url 'common:dropout' profile.user.id %}"
-        })
-    })
-</script>
 {% endblock %}

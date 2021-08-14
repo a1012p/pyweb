@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container mx-auto" style="margin:7rem">
+    {% include 'form_errors.html' %}
+    <form id="searchForm" method="get" action="{% url 'pybo:board' %}">
+        <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+        <input type="hidden" id="qa" name="qa" value="">
+    </form>
+    <div class="row">
+<!--        유저 정보-->
+        <div class="col-4 card">
+            {%if profile.photo %}
+            <img src="{{ profile.photo.url }}" class="card-top-img img-thumbnail w-75 profile-img" style="margin:auto ;">
+            {% else %}
+            <img src="{% static 'people/noimg.jpg' %}" class="card-top-img img-thumbnail" style="margin:auto">
+            {% endif %}
+            <ul class="list-group my-3">
+                <li class="list-group-item"><a href="#">질문&답변</a></li>
+                <li class="list-group-item"><a href="{% url 'common:userinfo' profile.user.id %}" >개인정보</a></li>
+                <li class="list-group-item"><a href="{% url 'common:passwordchange' profile.user.id %}">비밀번호 수정</a></li>
+                <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
+            </ul>
+        </div>
+        {% include 'common/drop_out.html' %}
+<!--        질문 & 답변 목록-->
+        <div class="col-8 card">
+            {% block box %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $("#more").on('click',function(){
+            $("#kw").val({{ user_id }});
+            if($(this).attr('id') == "que")
+                $("#qa").val("que")
+            else
+                $("#qa").val("as")
+            $("#searchForm").submit();
+        })
+        $('.drop').on('click',function(){
+            location.href="{% url 'common:dropout' profile.user.id %}"
+        })
+    })
+</script>
+{% endblock %}
