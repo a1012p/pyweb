@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, is_password_usable
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -12,7 +13,7 @@ from .forms import UserForm, ProfileForm
 from .models import Profile
 from django.contrib.auth.forms import PasswordChangeForm
 
-
+@login_required(login_url='common:login')
 def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -36,6 +37,7 @@ def signup(request):
     context = {'form' : form , 'Proform':Proform}
     return render(request,'common/signup.html',context)
 
+@login_required(login_url='common:login')
 def profile(request,user_id):
     user = User.objects.get(id=user_id)
     question_list = user.author_question.all().order_by('-create_date')
@@ -43,6 +45,7 @@ def profile(request,user_id):
     context = {'question_list':question_list , 'answer_list':answer_list , 'profile' :user.profile}
     return render(request,'common/profile.html',context)
 
+@login_required(login_url='common:login')
 def userinfo(request,user_id):
     user = User.objects.get(id=user_id)
     if request.method == "POST":
@@ -63,6 +66,7 @@ def userinfo(request,user_id):
     context = {'form' : profile_form ,'profile':user.profile }
     return render(request,'common/userinfo.html',context)
 
+@login_required(login_url='common:login')
 def dropout(request,user_id):
     user = User.objects.get(id=user_id)
     if request.user.is_authenticated:
@@ -71,6 +75,7 @@ def dropout(request,user_id):
     user.delete()
     return redirect('index')
 
+@login_required(login_url='common:login')
 def passwordchange(request,user_id):
     user = User.objects.get(id=user_id)
     if request.method == 'POST':
