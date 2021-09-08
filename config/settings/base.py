@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+import django.core.mail.backends.smtp
 from django.contrib.messages import constants as messages_constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -143,6 +145,7 @@ SESSION_COOKIE_AGE = 3600           # 3600초 동안 유지
 SESSION_SAVE_EVERY_REQUEST = True   # 페이지 리퀘스트가 있을경우 시간 초기화
 
 #이메일 관리
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT ='587'
 EMAIL_HOST_USER = 'a1027p@gmail.com'
