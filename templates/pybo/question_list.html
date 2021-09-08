@@ -73,7 +73,7 @@
                     {% endif %}
                 </a>
             </td>
-            <td>{{ question.author.profile.nickname }}</td>
+            <td><a href="{% url 'common:profile' question.author.id %}" >{{ question.author.profile.nickname }}</a></td>
             <td>{{ question.create_date }}</td>
             <td>{{ question.views }}</td>
         </tr>

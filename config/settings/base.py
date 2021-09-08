@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'six'
+
 ]
 
 MIDDLEWARE = [
@@ -99,6 +101,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'common.myUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -134,5 +138,14 @@ MEDIA_URL = '/media/'
 
 MESSAGE_LEVEL = messages_constants.DEBUG
 
-SESSION_COOKIE_AGE = 3600
-SESSION_SAVE_EVERY_REQUEST = True
+# 세션 관리
+SESSION_COOKIE_AGE = 3600           # 3600초 동안 유지
+SESSION_SAVE_EVERY_REQUEST = True   # 페이지 리퀘스트가 있을경우 시간 초기화
+
+#이메일 관리
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT ='587'
+EMAIL_HOST_USER = 'a1027p@gmail.com'
+EMAIL_HOST_PASSWORD = 'ballday$@!!1245'
+EMAIL_USE_TLS = True
+

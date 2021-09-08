@@ -2,13 +2,13 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django import forms
 
-from common.models import Profile
+from common.models import Profile, myUser
 
 
 class UserForm(UserCreationForm):
     email = forms.EmailField(label="이메일")
     class Meta:
-        model = User
+        model = myUser
         fields =("username","email")
 
 class ProfileForm(forms.ModelForm):

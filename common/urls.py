@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile/<int:user_id>/userinfo/',views.userinfo,name='userinfo'),
     path('profile/<int:user_id>/dropout/',views.dropout,name='dropout'),
     path('profile/<int:user_id>/passwordchange/',views.passwordchange,name='passwordchange'),
+    path('activate/<str:uid64>/<str:token>/',views.activate,name='activate'),
 ]
 
 #재네릭 뷰 방식 - 함수를 직접 정의할 필요가 없음

@@ -1,19 +1,24 @@
 import os
 
 from django.conf import settings
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, is_password_usable
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
+from django.http import HttpResponse
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.models import User
-from .forms import UserForm, ProfileForm
-from .models import Profile
-from django.contrib.auth.forms import PasswordChangeForm
+from django.template.loader import render_to_string
+from django.utils.encoding import force_text, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from .tokens import account_activation_token
 
-@login_required(login_url='common:login')
+from .forms import UserForm, ProfileForm
+from .models import Profile, myUser
+
 def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -23,13 +28,31 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username= username , password=raw_password)
+            user.active = False;
+            user.save()
             profile = Proform.save(commit=False)
             profile.user = user;
             if request.FILES:
                 profile.photo = request.FILES['photo']
             profile.nickname = request.POST['nickname']
             profile.save()
-            login(request,user)
+            current_site = get_current_site(request)
+            message = render_to_string('common/activation_email.html',{
+                'user': user,
+                'domain':current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                'token': account_activation_token.make_token(user),
+            })
+            mail_subject = "회원가입 인증 메일입니다."
+            user_email = user.email;
+            email = EmailMessage(mail_subject,message,to=[user_email])
+            email.send()
+            return HttpResponse(
+                '<div style="font-size: 40px; width: 100%; height:100%; display:flex; text-align:center; '
+                'justify-content: center; align-items: center;">'
+                '입력하신 이메일<span>로 인증링크가 전송되었습니다.</span>'
+                '</div>'
+            )
             return redirect('index')
     else:
         form = UserForm()
@@ -39,7 +62,7 @@ def signup(request):
 
 @login_required(login_url='common:login')
 def profile(request,user_id):
-    user = User.objects.get(id=user_id)
+    user = myUser.objects.get(id=user_id)
     question_list = user.author_question.all().order_by('-create_date')
     answer_list = user.author_answer.all().order_by('-create_date')
     context = {'question_list':question_list , 'answer_list':answer_list , 'profile' :user.profile}
@@ -47,7 +70,7 @@ def profile(request,user_id):
 
 @login_required(login_url='common:login')
 def userinfo(request,user_id):
-    user = User.objects.get(id=user_id)
+    user = myUser.objects.get(id=user_id)
     if request.method == "POST":
         profile_form = ProfileForm(request.POST)
         if request.FILES:
@@ -68,7 +91,7 @@ def userinfo(request,user_id):
 
 @login_required(login_url='common:login')
 def dropout(request,user_id):
-    user = User.objects.get(id=user_id)
+    user = myUser.objects.get(id=user_id)
     if request.user.is_authenticated:
         logout(request)
     user.profile.delete()
@@ -77,7 +100,7 @@ def dropout(request,user_id):
 
 @login_required(login_url='common:login')
 def passwordchange(request,user_id):
-    user = User.objects.get(id=user_id)
+    user = myUser.objects.get(id=user_id)
     if request.method == 'POST':
         now_password = request.POST['now_password']
         if check_password(now_password,user.password):
@@ -102,3 +125,17 @@ def passwordchange(request,user_id):
 
     context = {'profile': user.profile}
     return render(request,'common/passwordchange.html',context)
+
+def activate(request,uid64,token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uid64))
+        user = myUser.objects.get(pk=uid)
+    except(TypeError,ValueError,OverflowError,myUser.DoseNotExsit):
+        user = None;
+    if user is not None and account_activation_token.check_token(user,token):
+        user.active = True
+        user.save()
+        auth.login(request,user)
+        return redirect("index")
+    else:
+        return render(request,'index')

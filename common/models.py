@@ -2,7 +2,11 @@ import os.path
 
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
+
+class myUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    active = models.BooleanField(default=False)
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -15,4 +19,7 @@ class Profile(models.Model):
 
     def photoname(self):
         return self.photo.name.split('/')[-1]
+
+
+
 # Create your models here.

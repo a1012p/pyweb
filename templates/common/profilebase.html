@@ -18,9 +18,11 @@
             {% endif %}
             <ul class="list-group my-3">
                 <li class="list-group-item"><a href="#">질문&답변</a></li>
+                {% if profile.user.id == user.id %}
                 <li class="list-group-item"><a href="{% url 'common:userinfo' profile.user.id %}" >개인정보</a></li>
                 <li class="list-group-item"><a href="{% url 'common:passwordchange' profile.user.id %}">비밀번호 수정</a></li>
                 <li class="list-group-item"><a href="#" class="text-danger" data-toggle="modal" data-target="#drop_out">회원탈퇴</a></li>
+                {% endif %}
             </ul>
         </div>
         {% include 'common/drop_out.html' %}
