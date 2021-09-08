@@ -53,7 +53,6 @@ def signup(request):
                 '입력하신 이메일<span>로 인증링크가 전송되었습니다.</span>'
                 '</div>'
             )
-            return redirect('index')
     else:
         form = UserForm()
         Proform = ProfileForm()
